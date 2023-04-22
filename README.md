@@ -29,4 +29,10 @@
   </ul>
   <h2>License</h2>
   <p>This project is licensed under the MIT License - see the <code>LICENSE</code> file for details.</p>
-  <img src="" width="50%" height="50%"/>
+  <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233250.png" width="50%" height="50%"/>
+   <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233258.png" width="50%" height="50%"/>
+    <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233313.png" width="50%" height="50%"/>
+     <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233339.png" width="50%" height="50%"/>
+      <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233355.png" width="50%" height="50%"/>
+       <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233405.png" width="50%" height="50%"/>
+        <img src="https://github.com/KhubaibKhan4/News-App/blob/master/Screenshot_20230422_233510.png" width="50%" height="50%"/>
