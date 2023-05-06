@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.newsapp.Models.NewsHeadlines;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +24,8 @@ public class DetailedActivity extends AppCompatActivity {
     NewsHeadlines headlines;
     TextView text_title, text_published, text_source, text_data;
     ImageView img_news;
+    private AdView adView;
+
 
     @SuppressLint({"MissingInflatedId", "LocalSuppress"})
     @Override
@@ -30,6 +35,11 @@ public class DetailedActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_d);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+
+        MobileAds.initialize(this);
+        adView = findViewById(R.id.adViewD);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         ImageView backbtn = (ImageView) findViewById(R.id.back_arrow_btn);
         backbtn.setOnClickListener(new View.OnClickListener() {

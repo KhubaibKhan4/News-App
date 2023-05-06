@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">News App</string>
-    <string name="api_key">your-api-key</string>
+    <string name="api_key">Your Api Key</string>
+    <string name="appId">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="bannerId">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="IntersId">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

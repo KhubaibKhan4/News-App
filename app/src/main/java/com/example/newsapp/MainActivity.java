@@ -1,5 +1,6 @@
 package com.example.newsapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
@@ -11,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,6 +23,14 @@ import com.example.newsapp.Listeners.OnFetchListener;
 import com.example.newsapp.Listeners.OnSelectListener;
 import com.example.newsapp.Models.NewsHeadlines;
 import com.example.newsapp.Models.ResponseApi;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.util.List;
 
@@ -32,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements OnSelectListener,
     SearchView searchView;
     String category = "";
     Toolbar toolbar;
+    private AdView adView;
+    private InterstitialAd mInterstitial;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,11 +55,68 @@ public class MainActivity extends AppCompatActivity implements OnSelectListener,
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("News Now");
 
+        MobileAds.initialize(this);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        InterstitialAd.load(this, getString(R.string.IntersId), adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Toast.makeText(MainActivity.this, "" + loadAdError.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                mInterstitial = interstitialAd;
+
+                mInterstitial.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdClicked() {
+                        super.onAdClicked();
+                        mInterstitial = null;
+                    }
+
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent();
+                        mInterstitial = null;
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        super.onAdFailedToShowFullScreenContent(adError);
+                        mInterstitial = null;
+                    }
+
+                    @Override
+                    public void onAdImpression() {
+                        super.onAdImpression();
+                        mInterstitial = null;
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        super.onAdShowedFullScreenContent();
+                        mInterstitial = null;
+                    }
+                });
+            }
+        });
+
 
         searchView = (SearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (mInterstitial != null) {
+                    mInterstitial.show(MainActivity.this);
+                } else {
+                    Log.d("SearchView_Ads", "AdsPending");
+                }
+
                 RequestManager requestManager = new RequestManager(MainActivity.this);
                 requestManager.getHeadlines(listener, category, query);
                 return true;
@@ -110,6 +179,11 @@ public class MainActivity extends AppCompatActivity implements OnSelectListener,
 
     @Override
     public void onClick(View view) {
+        if (mInterstitial != null) {
+            mInterstitial.show(MainActivity.this);
+        } else {
+            Log.d("SearchView_Ads", "AdsPending");
+        }
         Button button = (Button) view;
         String category = button.getText().toString();
         dialog.setTitle("Please Wait, We're Loading Data...");
@@ -121,6 +195,11 @@ public class MainActivity extends AppCompatActivity implements OnSelectListener,
 
     @Override
     public void OnNewsClicked(NewsHeadlines newsHeadlines) {
+        if (mInterstitial != null) {
+            mInterstitial.show(MainActivity.this);
+        } else {
+            Log.d("SearchView_Ads", "AdsPending");
+        }
         startActivity(new Intent(MainActivity.this, DetailedActivity.class)
                 .putExtra("data", newsHeadlines));
     }
